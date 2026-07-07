@@ -75,7 +75,7 @@ class PromotionController
 
             if (!empty($errors)) {
                 View::setFlash('error', implode(' ', $errors));
-                View::render('admin/cpt/promotions/create', [
+                View::render('admin/cpt/promotions/form', [
                     'pageTitle' => 'Create Promotion',
                     'promotion' => $data,
                 ]);
@@ -85,7 +85,7 @@ class PromotionController
             // Validate date logic: end_date must be >= start_date if provided
             if (!empty($data['end_date']) && $data['end_date'] < $data['start_date']) {
                 View::setFlash('error', 'End date must be on or after the start date.');
-                View::render('admin/cpt/promotions/create', [
+                View::render('admin/cpt/promotions/form', [
                     'pageTitle' => 'Create Promotion',
                     'promotion' => $data,
                 ]);
@@ -135,7 +135,7 @@ class PromotionController
         }
 
         // GET — show empty form
-        View::render('admin/cpt/promotions/create', [
+        View::render('admin/cpt/promotions/form', [
             'pageTitle' => 'Create Promotion',
             'promotion' => [],
         ]);
@@ -176,7 +176,7 @@ class PromotionController
 
             if (!empty($errors)) {
                 View::setFlash('error', implode(' ', $errors));
-                View::render('admin/cpt/promotions/edit', [
+                View::render('admin/cpt/promotions/form', [
                     'pageTitle' => 'Edit Promotion',
                     'promotion' => array_merge($promotion, $data),
                 ]);
@@ -185,7 +185,7 @@ class PromotionController
 
             if (!empty($data['end_date']) && $data['end_date'] < $data['start_date']) {
                 View::setFlash('error', 'End date must be on or after the start date.');
-                View::render('admin/cpt/promotions/edit', [
+                View::render('admin/cpt/promotions/form', [
                     'pageTitle' => 'Edit Promotion',
                     'promotion' => array_merge($promotion, $data),
                 ]);
@@ -240,7 +240,7 @@ class PromotionController
         }
 
         // GET — show form with existing data
-        View::render('admin/cpt/promotions/edit', [
+        View::render('admin/cpt/promotions/form', [
             'pageTitle' => 'Edit Promotion',
             'promotion' => $promotion,
         ]);

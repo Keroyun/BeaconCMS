@@ -91,9 +91,9 @@ class Router
     {
         $this->get($prefix,                     "{$controller}@index",    true);
         $this->get("{$prefix}/create",          "{$controller}@create",   true);
-        $this->post("{$prefix}/create",         "{$controller}@store",    true);
+        $this->post("{$prefix}/create",         "{$controller}@create",   true);
         $this->get("{$prefix}/edit/{id}",       "{$controller}@edit",     true);
-        $this->post("{$prefix}/edit/{id}",      "{$controller}@update",   true);
+        $this->post("{$prefix}/edit/{id}",      "{$controller}@edit",     true);
         $this->post("{$prefix}/delete/{id}",    "{$controller}@delete",   true);
     }
 

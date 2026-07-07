@@ -78,7 +78,7 @@ class SpecialtyController
 
             if (!empty($errors)) {
                 View::setFlash('error', implode(' ', $errors));
-                View::render('admin/cpt/specialties/create', [
+                View::render('admin/cpt/specialties/form', [
                     'pageTitle'  => 'Add Specialty',
                     'specialty'  => $data,
                 ]);
@@ -110,7 +110,7 @@ class SpecialtyController
         }
 
         // GET — show empty form
-        View::render('admin/cpt/specialties/create', [
+        View::render('admin/cpt/specialties/form', [
             'pageTitle' => 'Add Specialty',
             'specialty' => [],
         ]);
@@ -150,7 +150,7 @@ class SpecialtyController
 
             if (!empty($errors)) {
                 View::setFlash('error', implode(' ', $errors));
-                View::render('admin/cpt/specialties/edit', [
+                View::render('admin/cpt/specialties/form', [
                     'pageTitle' => 'Edit Specialty',
                     'specialty' => array_merge($specialty, $data),
                 ]);
@@ -180,7 +180,7 @@ class SpecialtyController
         }
 
         // GET — show form with existing data
-        View::render('admin/cpt/specialties/edit', [
+        View::render('admin/cpt/specialties/form', [
             'pageTitle' => 'Edit Specialty',
             'specialty' => $specialty,
         ]);

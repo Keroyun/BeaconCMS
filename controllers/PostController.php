@@ -75,7 +75,7 @@ class PostController
 
             if (!empty($errors)) {
                 View::setFlash('error', implode(' ', $errors));
-                View::render('admin/posts/create', [
+                View::render('admin/posts/form', [
                     'pageTitle' => 'Create Post',
                     'post'      => $data,
                 ]);
@@ -113,7 +113,7 @@ class PostController
         }
 
         // GET — show empty form
-        View::render('admin/posts/create', [
+        View::render('admin/posts/form', [
             'pageTitle' => 'Create Post',
             'post'      => [],
         ]);
@@ -154,7 +154,7 @@ class PostController
 
             if (!empty($errors)) {
                 View::setFlash('error', implode(' ', $errors));
-                View::render('admin/posts/edit', [
+                View::render('admin/posts/form', [
                     'pageTitle' => 'Edit Post',
                     'post'      => array_merge($post, $data),
                 ]);
@@ -183,7 +183,7 @@ class PostController
         }
 
         // GET — show form with existing data
-        View::render('admin/posts/edit', [
+        View::render('admin/posts/form', [
             'pageTitle' => 'Edit Post',
             'post'      => $post,
         ]);

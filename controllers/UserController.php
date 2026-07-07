@@ -148,21 +148,21 @@ class UserController
             $secret = TOTP::createSecret();
             $this->user->update($id, ['two_factor_secret' => $secret, 'two_factor_enabled' => 0]);
             View::setFlash('success', '2FA Secret generated. Please scan the QR code and enable it.');
-            header('Location: ' . View::url('/admin/users/edit/' . $id));
+            header('Location: ' . View::url('/admin/users/form/' . $id));
             exit;
         }
 
         if (isset($_GET['action']) && $_GET['action'] === 'disable_2fa') {
             $this->user->update($id, ['two_factor_secret' => null, 'two_factor_enabled' => 0]);
             View::setFlash('success', '2FA has been disabled.');
-            header('Location: ' . View::url('/admin/users/edit/' . $id));
+            header('Location: ' . View::url('/admin/users/form/' . $id));
             exit;
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!Auth::verifyCSRF($_POST['csrf_token'] ?? '')) {
                 View::setFlash('error', 'Invalid security token.');
-                header('Location: ' . View::url('/admin/users/edit/' . $id));
+                header('Location: ' . View::url('/admin/users/form/' . $id));
                 exit;
             }
 
@@ -177,7 +177,7 @@ class UserController
 
             if (!empty($errors)) {
                 View::setFlash('error', implode(' ', $errors));
-                View::render('admin/users/edit', [
+                View::render('admin/users/form', [
                     'pageTitle' => 'Edit User',
                     'userData'  => array_merge($userData, $data),
                 ]);
@@ -188,7 +188,7 @@ class UserController
             $existing = $this->user->findByUsername($data['username']);
             if ($existing && (int) $existing['id'] !== $id) {
                 View::setFlash('error', 'Username already taken by another user.');
-                View::render('admin/users/edit', [
+                View::render('admin/users/form', [
                     'pageTitle' => 'Edit User',
                     'userData'  => array_merge($userData, $data),
                 ]);
@@ -199,7 +199,7 @@ class UserController
             $existingEmail = $this->user->findByEmail($data['email']);
             if ($existingEmail && (int) $existingEmail['id'] !== $id) {
                 View::setFlash('error', 'Email already in use by another user.');
-                View::render('admin/users/edit', [
+                View::render('admin/users/form', [
                     'pageTitle' => 'Edit User',
                     'userData'  => array_merge($userData, $data),
                 ]);
@@ -235,7 +235,7 @@ class UserController
         }
 
         // GET — show form with existing data
-        View::render('admin/users/edit', [
+        View::render('admin/users/form', [
             'pageTitle' => 'Edit User',
             'userData'  => $userData,
         ]);

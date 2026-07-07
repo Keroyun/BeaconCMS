@@ -73,7 +73,7 @@ class PageController
 
             if (!empty($errors)) {
                 View::setFlash('error', implode(' ', $errors));
-                View::render('admin/pages/create', [
+                View::render('admin/pages/form', [
                     'pageTitle' => 'Create Page',
                     'page'      => $data,
                 ]);
@@ -105,7 +105,7 @@ class PageController
         // GET — show empty form; pass all pages for parent dropdown
         $allPages = $this->page->all('title ASC');
 
-        View::render('admin/pages/create', [
+        View::render('admin/pages/form', [
             'pageTitle' => 'Create Page',
             'page'      => [],
             'allPages'  => $allPages,
@@ -148,7 +148,7 @@ class PageController
             if (!empty($errors)) {
                 View::setFlash('error', implode(' ', $errors));
                 $allPages = $this->page->all('title ASC');
-                View::render('admin/pages/edit', [
+                View::render('admin/pages/form', [
                     'pageTitle' => 'Edit Page',
                     'page'      => array_merge($page, $data),
                     'allPages'  => $allPages,
@@ -178,7 +178,7 @@ class PageController
         // GET — show form with existing data
         $allPages = $this->page->all('title ASC');
 
-        View::render('admin/pages/edit', [
+        View::render('admin/pages/form', [
             'pageTitle' => 'Edit Page',
             'page'      => $page,
             'allPages'  => $allPages,

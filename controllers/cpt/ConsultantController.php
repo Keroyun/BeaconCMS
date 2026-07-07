@@ -79,7 +79,7 @@ class ConsultantController
             if (!empty($errors)) {
                 View::setFlash('error', implode(' ', $errors));
                 $specialties = $this->specialty->all('name ASC');
-                View::render('admin/cpt/consultants/create', [
+                View::render('admin/cpt/consultants/form', [
                     'pageTitle'   => 'Add Consultant',
                     'consultant'  => $data,
                     'specialties' => $specialties,
@@ -130,7 +130,7 @@ class ConsultantController
         // GET — show empty form
         $specialties = $this->specialty->all('name ASC');
 
-        View::render('admin/cpt/consultants/create', [
+        View::render('admin/cpt/consultants/form', [
             'pageTitle'   => 'Add Consultant',
             'consultant'  => [],
             'specialties' => $specialties,
@@ -172,7 +172,7 @@ class ConsultantController
             if (!empty($errors)) {
                 View::setFlash('error', implode(' ', $errors));
                 $specialties = $this->specialty->all('name ASC');
-                View::render('admin/cpt/consultants/edit', [
+                View::render('admin/cpt/consultants/form', [
                     'pageTitle'   => 'Edit Consultant',
                     'consultant'  => array_merge($consultant, $data),
                     'specialties' => $specialties,
@@ -226,7 +226,7 @@ class ConsultantController
         // GET — show form with existing data
         $specialties = $this->specialty->all('name ASC');
 
-        View::render('admin/cpt/consultants/edit', [
+        View::render('admin/cpt/consultants/form', [
             'pageTitle'   => 'Edit Consultant',
             'consultant'  => $consultant,
             'specialties' => $specialties,
