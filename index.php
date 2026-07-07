@@ -30,6 +30,12 @@ if (!file_exists($configPath)) {
 
 require_once $configPath;
 
+if (!defined('DB_HOST')) {
+    // Config not fully set up — redirect to installer
+    header('Location: install.php');
+    exit;
+}
+
 // ── Autoloader ──────────────────────────────────────────────────────────────
 spl_autoload_register(function (string $className): void {
     // Map of directory prefixes to search for class files
