@@ -7,8 +7,12 @@
 
 // Prevent running if already installed
 if (file_exists(__DIR__ . '/config.php')) {
-    header('Location: /admin');
-    exit;
+    // If it's a dynamic config, check if DB_HOST is configured
+    require_once __DIR__ . '/config.php';
+    if (defined('DB_HOST')) {
+        header('Location: /admin');
+        exit;
+    }
 }
 
 $step = (int)($_POST['step'] ?? $_GET['step'] ?? 1);
@@ -350,7 +354,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $configContent .= "define('BCMS_VERSION', '1.0.0');\n";
 
                     if (file_put_contents(__DIR__ . '/config.php', $configContent) === false) {
-                        $errors[] = 'Failed to write config.php. Please check directory permissions.';
+                        // If writing failed (e.g. read-only on Vercel) but config.php already exists,
+                        // we treat it as successful and save the details in session to display env vars.
+                        if (file_exists(__DIR__ . '/config.php')) {
+                            $_SESSION['vercel_setup'] = [
+                                'DB_HOST' => $db['dbHost'],
+                                'DB_NAME' => $db['dbName'],
+                                'DB_USER' => $db['dbUser'],
+                                'DB_PASS' => $db['dbPass'],
+                                'SITE_URL' => $siteUrl,
+                                'SITE_NAME' => $siteName,
+                            ];
+                            $success = true;
+                            $step = 4;
+                        } else {
+                            $errors[] = 'Failed to write config.php. Please check directory permissions.';
+                        }
                     } else {
                         // Create uploads directory
                         if (!is_dir(__DIR__ . '/uploads')) {
@@ -759,9 +778,36 @@ $allPassed = !in_array(false, array_column($requirements, 1));
             <div class="success-message">
                 <h2>Installation Complete!</h2>
                 <p>BeaconCMS has been installed successfully. Your CMS is ready to use.</p>
-                <a href="<?php echo htmlspecialchars($detectedUrl); ?>/admin/login" class="btn btn-success btn-lg btn-block">
-                    <i class="fa-solid fa-sign-in-alt"></i> Login to Admin Panel
-                </a>
+
+                <?php if (isset($_SESSION['vercel_setup'])): ?>
+                    <div style="text-align: left; margin: 1.5rem 0; padding: 1.5rem; background: #1e293b; border-radius: 8px; border: 1px solid #334155;">
+                        <h4 style="color: #f59e0b; margin-bottom: 0.5rem;"><i class="fa-solid fa-circle-info"></i> Vercel Deployment Action Required</h4>
+                        <p style="font-size: 0.9rem; color: #94a3b8; margin-bottom: 1rem;">
+                            Since your Vercel filesystem is read-only, we could not save the config file directly. You <strong>MUST</strong> add these Environment Variables to your Vercel Dashboard for the site to work:
+                        </p>
+                        <table style="width: 100%; border-collapse: collapse; font-family: monospace; font-size: 0.85rem; color: #e2e8f0;">
+                            <thead>
+                                <tr style="border-bottom: 1px solid #334155; text-align: left;">
+                                    <th style="padding: 0.5rem;">Key</th>
+                                    <th style="padding: 0.5rem;">Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($_SESSION['vercel_setup'] as $key => $val): ?>
+                                    <tr style="border-bottom: 1px solid #1e293b;">
+                                        <td style="padding: 0.5rem; font-weight: bold; color: #38bdf8;"><?php echo htmlspecialchars($key); ?></td>
+                                        <td style="padding: 0.5rem; word-break: break-all;"><?php echo htmlspecialchars($val); ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                <?php else: ?>
+                    <a href="<?php echo htmlspecialchars($detectedUrl); ?>/admin/login" class="btn btn-success btn-lg btn-block">
+                        <i class="fa-solid fa-sign-in-alt"></i> Login to Admin Panel
+                    </a>
+                <?php endif; ?>
+
                 <p style="margin-top: 1.5rem; font-size: 0.8rem; color: #f59e0b;">
                     <i class="fa-solid fa-triangle-exclamation"></i>
                     <strong>Security:</strong> Delete or rename <code>install.php</code> after installation.
