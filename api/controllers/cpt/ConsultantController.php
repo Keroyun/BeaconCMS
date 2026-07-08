@@ -68,7 +68,13 @@ class ConsultantController
                 exit;
             }
 
+            $rawBio = $_POST['bio'] ?? '';
+            $rawQuals = $_POST['qualifications'] ?? '';
+            $rawExp = $_POST['experience'] ?? '';
             $data = Sanitizer::cleanArray($_POST);
+            $data['bio'] = $rawBio;
+            $data['qualifications'] = $rawQuals;
+            $data['experience'] = $rawExp;
 
             $rules = [
                 'name'   => 'required',
@@ -161,7 +167,13 @@ class ConsultantController
                 exit;
             }
 
+            $rawBio = $_POST['bio'] ?? '';
+            $rawQuals = $_POST['qualifications'] ?? '';
+            $rawExp = $_POST['experience'] ?? '';
             $data = Sanitizer::cleanArray($_POST);
+            $data['bio'] = $rawBio;
+            $data['qualifications'] = $rawQuals;
+            $data['experience'] = $rawExp;
 
             $rules = [
                 'name'   => 'required',

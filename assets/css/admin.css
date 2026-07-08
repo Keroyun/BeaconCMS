@@ -972,8 +972,9 @@ body.sidebar-collapsed .admin-main {
 
 .form-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
+  grid-template-columns: 1fr 340px;
+  gap: 24px;
+  align-items: start;
 }
 
 .form-grid .full-width {
@@ -1666,6 +1667,10 @@ select.form-control {
 
   .form-grid {
     grid-template-columns: 1fr;
+  }
+
+  .form-sidebar {
+    order: 2;
   }
 }
 

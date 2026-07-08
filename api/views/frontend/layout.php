@@ -32,7 +32,7 @@ $bodyClass = isset($bodyClass) ? ' ' . $bodyClass : '';
     <?php endif; ?>
 
     <!-- Stylesheet -->
-    <link rel="stylesheet" href="<?php echo htmlspecialchars((function_exists('View') ? View::asset('css/frontend.css') : $siteUrl . 'assets/css/frontend.css'), ENT_QUOTES, 'UTF-8'); ?>">
+    <link rel="stylesheet" href="<?php echo htmlspecialchars((class_exists('View') ? View::asset('css/frontend.css') : $siteUrl . 'assets/css/frontend.css'), ENT_QUOTES, 'UTF-8'); ?>">
 
     <!-- Header Snippets (HFCM) -->
     <?php 
@@ -54,18 +54,32 @@ $bodyClass = isset($bodyClass) ? ' ' . $bodyClass : '';
     <!-- ========== Navbar ========== -->
     <nav class="navbar" id="main-navbar">
         <div class="navbar__inner">
-            <a href="<?php echo htmlspecialchars($siteUrl, ENT_QUOTES, 'UTF-8'); ?>" class="navbar__logo">
+            <a href="<?php echo url('/'); ?>" class="navbar__logo">
                 <span class="navbar__logo-icon">B</span>
                 <span class="navbar__logo-text"><?php echo htmlspecialchars($siteName, ENT_QUOTES, 'UTF-8'); ?></span>
             </a>
 
             <div class="navbar__nav" id="nav-menu">
-                <a href="<?php echo htmlspecialchars($siteUrl, ENT_QUOTES, 'UTF-8'); ?>" class="navbar__link<?php echo (isset($activeNav) && $activeNav === 'home') ? ' navbar__link--active' : ''; ?>">Home</a>
-                <a href="<?php echo htmlspecialchars($siteUrl, ENT_QUOTES, 'UTF-8'); ?>consultants" class="navbar__link<?php echo (isset($activeNav) && $activeNav === 'consultants') ? ' navbar__link--active' : ''; ?>">Doctors</a>
-                <a href="<?php echo htmlspecialchars($siteUrl, ENT_QUOTES, 'UTF-8'); ?>specialties" class="navbar__link<?php echo (isset($activeNav) && $activeNav === 'specialties') ? ' navbar__link--active' : ''; ?>">Specialties</a>
-                <a href="<?php echo htmlspecialchars($siteUrl, ENT_QUOTES, 'UTF-8'); ?>promotions" class="navbar__link<?php echo (isset($activeNav) && $activeNav === 'promotions') ? ' navbar__link--active' : ''; ?>">Promotions</a>
-                <a href="<?php echo htmlspecialchars($siteUrl, ENT_QUOTES, 'UTF-8'); ?>blog" class="navbar__link<?php echo (isset($activeNav) && $activeNav === 'blog') ? ' navbar__link--active' : ''; ?>">Blog</a>
-                <a href="<?php echo htmlspecialchars($siteUrl, ENT_QUOTES, 'UTF-8'); ?>contact" class="navbar__link<?php echo (isset($activeNav) && $activeNav === 'contact') ? ' navbar__link--active' : ''; ?>">Contact</a>
+                <?php
+                $currentLang = class_exists('Language') ? Language::current() : 'en';
+                $settingModel = class_exists('Setting') ? new Setting() : null;
+                $customMenu = $settingModel ? $settingModel->get('navbar_menu_' . $currentLang) : '';
+
+                if (!empty($customMenu)) {
+                    // Output user's custom HTML menu links directly (for the active language)
+                    echo $customMenu;
+                } else {
+                    // Fallback to default navigation menu
+                    ?>
+                    <a href="<?php echo url('/'); ?>" class="navbar__link<?php echo (isset($activeNav) && $activeNav === 'home') ? ' navbar__link--active' : ''; ?>">Home</a>
+                    <a href="<?php echo url('/doctors'); ?>" class="navbar__link<?php echo (isset($activeNav) && $activeNav === 'consultants') ? ' navbar__link--active' : ''; ?>">Doctors</a>
+                    <a href="<?php echo url('/specialties'); ?>" class="navbar__link<?php echo (isset($activeNav) && $activeNav === 'specialties') ? ' navbar__link--active' : ''; ?>">Specialties</a>
+                    <a href="<?php echo url('/promotions'); ?>" class="navbar__link<?php echo (isset($activeNav) && $activeNav === 'promotions') ? ' navbar__link--active' : ''; ?>">Promotions</a>
+                    <a href="<?php echo url('/blog'); ?>" class="navbar__link<?php echo (isset($activeNav) && $activeNav === 'blog') ? ' navbar__link--active' : ''; ?>">Blog</a>
+                    <a href="<?php echo url('/contact'); ?>" class="navbar__link<?php echo (isset($activeNav) && $activeNav === 'contact') ? ' navbar__link--active' : ''; ?>">Contact</a>
+                    <?php
+                }
+                ?>
             </div>
             
             <div class="navbar__actions" style="display:flex;align-items:center;gap:15px;">
@@ -108,11 +122,11 @@ $bodyClass = isset($bodyClass) ? ' ' . $bodyClass : '';
                 <div class="footer__col">
                     <h4 class="footer__heading">Quick Links</h4>
                     <div class="footer__links">
-                        <a href="<?php echo htmlspecialchars($siteUrl, ENT_QUOTES, 'UTF-8'); ?>consultants" class="footer__link">Our Doctors</a>
-                        <a href="<?php echo htmlspecialchars($siteUrl, ENT_QUOTES, 'UTF-8'); ?>specialties" class="footer__link">Specialties</a>
-                        <a href="<?php echo htmlspecialchars($siteUrl, ENT_QUOTES, 'UTF-8'); ?>promotions" class="footer__link">Promotions</a>
-                        <a href="<?php echo htmlspecialchars($siteUrl, ENT_QUOTES, 'UTF-8'); ?>blog" class="footer__link">Health Blog</a>
-                        <a href="<?php echo htmlspecialchars($siteUrl, ENT_QUOTES, 'UTF-8'); ?>contact" class="footer__link">Contact Us</a>
+                        <a href="<?php echo url('/doctors'); ?>" class="footer__link">Our Doctors</a>
+                        <a href="<?php echo url('/specialties'); ?>" class="footer__link">Specialties</a>
+                        <a href="<?php echo url('/promotions'); ?>" class="footer__link">Promotions</a>
+                        <a href="<?php echo url('/blog'); ?>" class="footer__link">Health Blog</a>
+                        <a href="<?php echo url('/contact'); ?>" class="footer__link">Contact Us</a>
                     </div>
                 </div>
 
@@ -141,7 +155,7 @@ $bodyClass = isset($bodyClass) ? ' ' . $bodyClass : '';
     </footer>
 
     <!-- Frontend Scripts -->
-    <script src="<?php echo htmlspecialchars((function_exists('View') ? View::asset('js/frontend.js') : $siteUrl . 'assets/js/frontend.js'), ENT_QUOTES, 'UTF-8'); ?>"></script>
+    <script src="<?php echo htmlspecialchars((class_exists('View') ? View::asset('js/frontend.js') : $siteUrl . 'assets/js/frontend.js'), ENT_QUOTES, 'UTF-8'); ?>"></script>
 
     <!-- Footer Snippets (HFCM) -->
     <?php 

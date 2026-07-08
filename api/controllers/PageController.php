@@ -62,7 +62,9 @@ class PageController
                 exit;
             }
 
+            $rawContent = $_POST['content'] ?? '';
             $data = Sanitizer::cleanArray($_POST);
+            $data['content'] = $rawContent;
 
             $rules = [
                 'title'   => 'required',
@@ -136,7 +138,9 @@ class PageController
                 exit;
             }
 
+            $rawContent = $_POST['content'] ?? '';
             $data = Sanitizer::cleanArray($_POST);
+            $data['content'] = $rawContent;
 
             $rules = [
                 'title'   => 'required',

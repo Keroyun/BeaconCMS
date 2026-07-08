@@ -59,7 +59,7 @@ class Router
 
         // ── CRUD: Settings ──────────────────────────────────────────────────
         $this->get('admin/settings',            'SettingController@index',     true);
-        $this->post('admin/settings',           'SettingController@update',    true);
+        $this->post('admin/settings',           'SettingController@index',     true);
 
         // ── CRUD: Categories (Taxonomy) ─────────────────────────────────────
         $this->crud('admin/categories',         'CategoryController');

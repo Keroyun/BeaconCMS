@@ -34,6 +34,27 @@ ob_start();
                         <label>Footer Text</label>
                         <input type="text" name="footer_text" class="form-control" value="<?php echo he($settings['footer_text'] ?? ''); ?>">
                     </div>
+                    <div class="form-group">
+                        <label for="homepage_page_id">
+                            <i class="fa-solid fa-house" style="margin-right:5px;color:var(--accent);"></i>
+                            Front Page (Homepage)
+                        </label>
+                        <select id="homepage_page_id" name="homepage_page_id" class="form-control">
+                            <option value="">— Default Dynamic Homepage —</option>
+                            <?php if (!empty($allPages)): ?>
+                                <?php foreach ($allPages as $p): ?>
+                                    <option value="<?php echo (int)$p['id']; ?>"
+                                        <?php echo ((int)($settings['homepage_page_id'] ?? 0) === (int)$p['id']) ? 'selected' : ''; ?>>
+                                        <?php echo he($p['title']); ?>
+                                        <?php echo $p['status'] !== 'published' ? ' (Draft)' : ''; ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </select>
+                        <small style="color:var(--text-muted);margin-top:4px;display:block;">
+                            Select a page to use as the site's front page, or leave as "Default Dynamic Homepage" to show the automatic feed of doctors, specialties and promotions.
+                        </small>
+                    </div>
                 </div>
             </div>
 
@@ -105,6 +126,32 @@ ob_start();
                             <input type="text" name="captcha_secret_key" class="form-control" value="<?php echo he($settings['captcha_secret_key'] ?? ''); ?>">
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- Navigation Menu Settings -->
+            <div class="card mt-4">
+                <div class="card-header"><h3><i class="fa-solid fa-bars"></i> Navigation Menu (HTML)</h3></div>
+                <div class="card-body">
+                    <p class="text-muted" style="font-size:0.85rem;">Customise your main menu links using HTML. Leaving these fields blank will fall back to the default hardcoded navigation menu.</p>
+                    
+                    <?php
+                    $activeLanguages = class_exists('Language') ? Language::getAll() : ['en' => ['name' => 'English', 'native_name' => 'English', 'flag' => '🇬🇧']];
+                    foreach ($activeLanguages as $code => $lang):
+                        $settingKey = 'navbar_menu_' . $code;
+                        $menuHtml = $settings[$settingKey] ?? '';
+                    ?>
+                        <div class="form-group">
+                            <label for="<?php echo $settingKey; ?>">
+                                <?php echo htmlspecialchars($lang['flag'] ?? '', ENT_QUOTES, 'UTF-8'); ?> 
+                                Menu HTML (<?php echo htmlspecialchars($lang['native_name'] ?? $lang['name'], ENT_QUOTES, 'UTF-8'); ?>)
+                            </label>
+                            <textarea id="<?php echo $settingKey; ?>" name="<?php echo $settingKey; ?>" class="form-control" rows="6" style="font-family:monospace; font-size:0.85rem; background:#16181f; color:#cbd5e1; border:1px solid #2d313f;" placeholder='<a href="/doctors" class="navbar__link">Doctors</a>&#10;<a href="/specialties" class="navbar__link">Specialties</a>'><?php echo htmlspecialchars($menuHtml, ENT_QUOTES, 'UTF-8'); ?></textarea>
+                            <small class="text-muted" style="font-size:0.75rem; display:block; margin-top:4px;">
+                                Use <code>&lt;a href="/path" class="navbar__link"&gt;Label&lt;/a&gt;</code> for each item.
+                            </small>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
             </div>
 

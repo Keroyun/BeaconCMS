@@ -47,13 +47,15 @@ class AdminController
         $recentPosts = $postModel->recent(5);
 
         View::render('admin/dashboard', [
-            'pageTitle'        => 'Dashboard',
-            'totalPosts'       => $totalPosts,
-            'totalPages'       => $totalPages,
-            'totalConsultants' => $totalConsultants,
-            'totalPromotions'  => $totalPromotions,
-            'totalMedia'       => $totalMedia,
-            'recentPosts'      => $recentPosts,
+            'pageTitle'   => 'Dashboard',
+            'stats'       => [
+                'post_count'       => $totalPosts,
+                'page_count'       => $totalPages,
+                'consultant_count' => $totalConsultants,
+                'promotion_count'  => $totalPromotions,
+                'media_count'      => $totalMedia,
+            ],
+            'recentPosts' => $recentPosts,
         ]);
     }
 }

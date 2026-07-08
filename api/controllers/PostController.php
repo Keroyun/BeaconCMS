@@ -64,7 +64,11 @@ class PostController
                 exit;
             }
 
+            $rawContent = $_POST['content'] ?? '';
+            $rawExcerpt = $_POST['excerpt'] ?? '';
             $data = Sanitizer::cleanArray($_POST);
+            $data['content'] = $rawContent;
+            $data['excerpt'] = $rawExcerpt;
 
             $rules = [
                 'title'   => 'required',
@@ -143,7 +147,11 @@ class PostController
                 exit;
             }
 
+            $rawContent = $_POST['content'] ?? '';
+            $rawExcerpt = $_POST['excerpt'] ?? '';
             $data = Sanitizer::cleanArray($_POST);
+            $data['content'] = $rawContent;
+            $data['excerpt'] = $rawExcerpt;
 
             $rules = [
                 'title'   => 'required',

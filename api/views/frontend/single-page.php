@@ -7,6 +7,7 @@
  *   $seoData — optional
  */
 
+$isFrontendHome = $isFrontendHome ?? false;
 $page      = $page ?? [];
 $seoData   = $seoData ?? [];
 $pageTitle = $page['title'] ?? 'Page';
@@ -17,16 +18,19 @@ $siteUrl = defined('SITE_URL') ? SITE_URL : '/';
 ob_start();
 ?>
 
+<?php if (!$isFrontendHome): ?>
 <!-- Page Banner -->
 <section class="page-banner">
     <div class="container">
         <h1 class="page-banner__title"><?php echo htmlspecialchars($page['title'] ?? '', ENT_QUOTES, 'UTF-8'); ?></h1>
     </div>
 </section>
+<?php endif; ?>
 
 <section class="page-single">
     <div class="container container--narrow">
 
+        <?php if (!$isFrontendHome): ?>
         <!-- Breadcrumb -->
         <nav class="breadcrumb">
             <ol class="breadcrumb__list">
@@ -40,6 +44,7 @@ ob_start();
         </nav>
 
         <h1 class="page-single__title"><?php echo htmlspecialchars($page['title'] ?? '', ENT_QUOTES, 'UTF-8'); ?></h1>
+        <?php endif; ?>
 
         <div class="page-single__content">
             <?php echo $page['content'] ?? ''; /* HTML content, sanitized on save */ ?>

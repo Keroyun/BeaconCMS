@@ -64,7 +64,9 @@ class PromotionController
                 exit;
             }
 
+            $rawDesc = $_POST['description'] ?? '';
             $data = Sanitizer::cleanArray($_POST);
+            $data['description'] = $rawDesc;
 
             $rules = [
                 'title'      => 'required',
@@ -165,7 +167,9 @@ class PromotionController
                 exit;
             }
 
+            $rawDesc = $_POST['description'] ?? '';
             $data = Sanitizer::cleanArray($_POST);
+            $data['description'] = $rawDesc;
 
             $rules = [
                 'title'      => 'required',

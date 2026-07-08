@@ -55,14 +55,43 @@ class FrontendController
     }
 
     /**
-     * Homepage: recent posts, featured consultants, active promotions.
+     * Homepage: checks if a static page is set as the front page.
+     * If yes, renders that page's content.
+     * If no, renders the default dynamic homepage.
      */
     public function home(): void
     {
-        $recentPosts   = $this->post->recent(5);
-        $consultants   = $this->consultant->published();
-        $promotions    = $this->promotion->active();
-        $settings      = $this->setting->getAllAsArray();
+        $settings = $this->setting->getAllAsArray();
+
+        // Check if admin has selected a static page as the front page
+        $homepagePageId = (int) ($settings['homepage_page_id'] ?? 0);
+
+        if ($homepagePageId > 0) {
+            $homePage = $this->page->find($homepagePageId);
+
+            if ($homePage && $homePage['status'] === 'published') {
+                $seo = $this->seoData([
+                    'title'       => $homePage['seo_title'] ?: $homePage['title'],
+                    'description' => $homePage['seo_description'] ?? ($settings['site_description'] ?? ''),
+                    'og_image'    => $homePage['og_image'] ?? '',
+                ]);
+
+                View::render('frontend/single-page', [
+                    'pageTitle' => $homePage['title'],
+                    'seoData'   => $seo,
+                    'page'      => $homePage,
+                    'settings'  => $settings,
+                    'isFrontendHome' => true,
+                ]);
+                return;
+            }
+        }
+
+        // Default: dynamic homepage with live data
+        $recentPosts = $this->post->recent(5);
+        $consultants = $this->consultant->published();
+        $promotions  = $this->promotion->active();
+        $specialties = $this->specialty->published();
 
         $seo = $this->seoData([
             'title'       => $settings['site_name'] ?? 'Home',
@@ -71,10 +100,11 @@ class FrontendController
 
         View::render('frontend/home', [
             'pageTitle'   => 'Home',
-            'seo'         => $seo,
-            'recentPosts' => $recentPosts,
+            'seoData'     => $seo,
+            'posts'       => $recentPosts,
             'consultants' => $consultants,
             'promotions'  => $promotions,
+            'specialties' => $specialties,
             'settings'    => $settings,
         ]);
     }

@@ -51,8 +51,8 @@ class Setting extends Model
             $db->update(
                 $this->table,
                 ['setting_value' => $value, 'setting_group' => $group],
-                'setting_key = :key',
-                ['key' => $key]
+                'setting_key = ?',
+                [$key]
             );
         } else {
             $db->insert($this->table, [

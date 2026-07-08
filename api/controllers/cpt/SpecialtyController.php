@@ -68,7 +68,9 @@ class SpecialtyController
                 exit;
             }
 
+            $rawDesc = $_POST['description'] ?? '';
             $data = Sanitizer::cleanArray($_POST);
+            $data['description'] = $rawDesc;
 
             $rules = [
                 'name'   => 'required',
@@ -140,7 +142,9 @@ class SpecialtyController
                 exit;
             }
 
+            $rawDesc = $_POST['description'] ?? '';
             $data = Sanitizer::cleanArray($_POST);
+            $data['description'] = $rawDesc;
 
             $rules = [
                 'name'   => 'required',
